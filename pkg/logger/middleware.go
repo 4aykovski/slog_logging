@@ -20,12 +20,12 @@ func NewHandleMiddleware(next slog.Handler) *HandlerMiddleware {
 }
 
 func (h *HandlerMiddleware) Handle(ctx context.Context, rec slog.Record) error {
-	if logArgs, ok := ctx.Value(LogKey).(map[string]any); ok {
-		if logArgs != nil {
-			for logKey, logValue := range logArgs {
-				rec.Add(logKey, logValue)
-			}
+	if logArgs, ok := ctx.Value(LogKey).(LogCtx); ok {
+
+		for logKey, logValue := range logArgs.Args {
+			rec.Add(logKey, logValue)
 		}
+
 	}
 
 	return h.next.Handle(ctx, rec)
