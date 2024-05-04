@@ -2,21 +2,33 @@ package logger
 
 import "context"
 
-func AddArg(ctx context.Context, key string, value any) context.Context {
-	return AddArgs(ctx, map[string]any{key: value})
+type LogCtx struct {
+	Args map[string]any
+}
+
+func NewLogCtx() LogCtx {
+	return LogCtx{Args: make(map[string]any)}
 }
 
 func AddArgs(ctx context.Context, args map[string]any) context.Context {
 	newArgs := make(map[string]any)
-	if prevArgs, ok := ctx.Value(LogKey).(map[string]any); ok {
-		newArgs = prevArgs
+
+	if prevCtx, ok := ctx.Value(LogKey).(LogCtx); ok {
+		for k, v := range args {
+			prevCtx.Args[k] = v
+		}
+		return context.WithValue(ctx, LogKey, prevCtx)
 	}
 
 	for k, v := range args {
 		newArgs[k] = v
 	}
 
-	return context.WithValue(ctx, LogKey, newArgs)
+	return context.WithValue(ctx, LogKey, LogCtx{Args: newArgs})
+}
+
+func AddArg(ctx context.Context, key string, value any) context.Context {
+	return AddArgs(ctx, map[string]any{key: value})
 }
 
 func AddComponent(ctx context.Context, component string) context.Context {

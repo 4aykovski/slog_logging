@@ -7,7 +7,7 @@ import (
 
 type errorWithCtx struct {
 	next   error
-	logCtx map[string]any
+	logCtx LogCtx
 }
 
 func (e *errorWithCtx) Error() string {
@@ -26,13 +26,13 @@ func ErrorCtx(ctx context.Context, err error) context.Context {
 func WrapError(ctx context.Context, err error) error {
 	ctx = ErrorCtx(ctx, err)
 
-	c := make(map[string]any)
-	if x, ok := ctx.Value(LogKey).(map[string]any); ok {
-		c = x
+	newCtx := LogCtx{Args: make(map[string]any)}
+	if prevCtx, ok := ctx.Value(LogKey).(LogCtx); ok {
+		newCtx = prevCtx
 	}
 
 	return &errorWithCtx{
 		next:   err,
-		logCtx: c,
+		logCtx: newCtx,
 	}
 }

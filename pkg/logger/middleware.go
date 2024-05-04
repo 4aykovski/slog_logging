@@ -15,7 +15,7 @@ type HandlerMiddleware struct {
 	next slog.Handler
 }
 
-func New(next slog.Handler) *HandlerMiddleware {
+func NewHandleMiddleware(next slog.Handler) *HandlerMiddleware {
 	return &HandlerMiddleware{next: next}
 }
 

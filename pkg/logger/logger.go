@@ -19,7 +19,7 @@ func InitLogging(env string) {
 		}))
 	}
 
-	handler = New(handler)
+	handler = NewHandleMiddleware(handler)
 	slog.SetDefault(slog.New(handler))
 }
 
