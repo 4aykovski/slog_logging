@@ -7,20 +7,19 @@ type LogCtx struct {
 }
 
 func AddArgs(ctx context.Context, args map[string]any) context.Context {
-	newArgs := make(map[string]any)
+	newCtx := LogCtx{Args: make(map[string]any)}
 
 	if prevCtx, ok := ctx.Value(LogKey).(LogCtx); ok {
-		for k, v := range args {
-			prevCtx.Args[k] = v
+		for k, v := range prevCtx.Args {
+			newCtx.Args[k] = v
 		}
-		return context.WithValue(ctx, LogKey, prevCtx)
 	}
 
 	for k, v := range args {
-		newArgs[k] = v
+		newCtx.Args[k] = v
 	}
 
-	return context.WithValue(ctx, LogKey, LogCtx{Args: newArgs})
+	return context.WithValue(ctx, LogKey, newCtx)
 }
 
 func AddArg(ctx context.Context, key string, value any) context.Context {
