@@ -6,10 +6,6 @@ type LogCtx struct {
 	Args map[string]any
 }
 
-func NewLogCtx() LogCtx {
-	return LogCtx{Args: make(map[string]any)}
-}
-
 func AddArgs(ctx context.Context, args map[string]any) context.Context {
 	newArgs := make(map[string]any)
 
