@@ -10,9 +10,11 @@ import (
 
 func Test(ctx context.Context) error {
 	logArgs := make(map[string]any)
-	logArgs["key"] = "value"
-
+	logArgs["component"] = "repo"
 	ctx = logger.AddArgs(ctx, logArgs)
+
+	logger.InfoCtx(ctx, "test")
+
 	ctx = logger.AddArg(ctx, "key2", "value2")
 	ctx = logger.AddComponent(ctx, "repo")
 
