@@ -12,12 +12,13 @@ func Test(ctx context.Context) error {
 	logArgs := make(map[string]any)
 	logArgs["key"] = "value"
 
-	ctx2 := logger.AddArgs(ctx, logArgs)
-	ctx2 = logger.AddArg(ctx2, "key2", "value2")
+	ctx = logger.AddArgs(ctx, logArgs)
+	ctx = logger.AddArg(ctx, "key2", "value2")
+	ctx = logger.AddComponent(ctx, "repo")
 
 	err := fmt.Errorf("repository error: %w", errors.New("123"))
 	if err != nil {
-		return logger.WrapError(ctx2, err)
+		return logger.WrapError(ctx, err)
 	}
 
 	return nil

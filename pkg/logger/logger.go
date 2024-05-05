@@ -65,6 +65,6 @@ func DebugCtx(ctx context.Context, format string, args ...any) {
 
 func getPcs() []uintptr {
 	var pcs [1]uintptr
-	runtime.Callers(2, pcs[:])
+	runtime.Callers(3, pcs[:])
 	return pcs[:]
 }
