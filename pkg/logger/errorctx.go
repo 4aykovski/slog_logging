@@ -28,9 +28,7 @@ func WrapError(ctx context.Context, err error) error {
 
 	newCtx := LogCtx{Args: make(map[string]any)}
 	if prevCtx, ok := ctx.Value(LogKey).(LogCtx); ok {
-		for k, v := range prevCtx.Args {
-			newCtx.Args[k] = v
-		}
+		newCtx = prevCtx
 	}
 
 	return &errorWithCtx{
